@@ -5,6 +5,7 @@ import loginService from "./services/login";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -17,15 +18,19 @@ const App = () => {
     event.preventDefault();
 
     try {
-      const user = loginService.login({
+      const user = await loginService.login({
         username,
         password,
       });
       setUser(user);
       setUsername("");
       setPassword("");
-    } catch (error) {
-      console.log(error);
+    } catch (exception) {
+      // console.log(exception);
+      setErrorMessage("wrong credentials");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
@@ -58,10 +63,16 @@ const App = () => {
       </div>
     );
   }
+  console.log("user:", user.name);
 
   return (
     <div>
       <h2>blogs</h2>
+      {user && (
+        <div>
+          <h3>{user.name} logged in</h3>
+        </div>
+      )}
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
