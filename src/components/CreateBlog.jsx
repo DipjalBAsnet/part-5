@@ -9,6 +9,7 @@ const CreateBlog = ({
 }) => {
   return (
     <div>
+      <h2>create new</h2>
       <form onSubmit={handleCreateNewBlog}>
         <div>
           title:
@@ -16,7 +17,8 @@ const CreateBlog = ({
             type="text"
             name="title"
             value={title}
-            onChange={({ target }) => setTitle(target.value)}
+            onChange={setTitle}
+            required
           />{" "}
           <br />
         </div>
@@ -26,18 +28,14 @@ const CreateBlog = ({
             type="text"
             name="author"
             value={author}
-            onChange={({ target }) => setAuthor(target.value)}
+            onChange={setAuthor}
+            required
           />{" "}
           <br />
         </div>
         <div>
           url:
-          <input
-            type="url"
-            name="url"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
+          <input type="url" name="url" value={url} onChange={setUrl} required />
         </div>
         <br />
         <button type="submit">create</button>

@@ -7,6 +7,7 @@ import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
+  const [createVisible, setCreateVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successfulMessage, setSuccessfulMesssage] = useState(null);
   const [username, setUsername] = useState("");
@@ -114,45 +115,35 @@ const App = () => {
           </div>
           <button type="submit">login</button>
         </form>
-
-        <div>
-          <form onSubmit={handleCreateNewBlog}>
-            <div>
-              title:
-              <input
-                type="text"
-                name="title"
-                value={title}
-                onChange={({ target }) => setTitle(target.value)}
-              />{" "}
-              <br />
-            </div>
-            <div>
-              author:
-              <input
-                type="text"
-                name="author"
-                value={author}
-                onChange={({ target }) => setAuthor(target.value)}
-              />{" "}
-              <br />
-            </div>
-            <div>
-              url:
-              <input
-                type="url"
-                name="url"
-                value={url}
-                onChange={({ target }) => setUrl(target.value)}
-              />
-            </div>
-            <br />
-          </form>
-          <button type="submit">create</button>
-        </div>
       </div>
     );
   }
+
+  const creteBlogForm = () => {
+    const hideWhenVisible = { display: createVisible ? "none" : "" };
+    const showWhenVisible = { display: createVisible ? "" : "none" };
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setCreateVisible(true)}>new note</button>
+        </div>
+
+        <div style={showWhenVisible}>
+          <CreateBlog
+            handleCreateNewBlog={handleCreateNewBlog}
+            title={title}
+            setTitle={({ target }) => setTitle(target.value)}
+            author={author}
+            setAuthor={({ target }) => setAuthor(target.value)}
+            url={url}
+            setUrl={({ target }) => setUrl(target.value)}
+          />
+          <button onClick={() => setCreateVisible(false)}>cancel</button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -161,6 +152,7 @@ const App = () => {
         errorMessage={errorMessage}
         successfulMessage={successfulMessage}
       />
+      {creteBlogForm()}
       {user && (
         <div>
           <h3>{user.name} logged in</h3>
@@ -170,16 +162,6 @@ const App = () => {
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
-      <h2>create new</h2>
-      <CreateBlog
-        handleCreateNewBlog={handleCreateNewBlog}
-        title={title}
-        setTitle={setTitle}
-        author={author}
-        setAuthor={setAuthor}
-        url={url}
-        setUrl={setUrl}
-      />
     </div>
   );
 };
