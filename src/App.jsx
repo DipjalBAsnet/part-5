@@ -13,9 +13,6 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -30,19 +27,10 @@ const App = () => {
     }
   }, []);
 
-  const handleCreateNewBlog = async (event) => {
-    event.preventDefault();
-
+  const handleCreateNewBlog = async (blogData) => {
     try {
-      const newBlog = await blogService.create({
-        title,
-        author,
-        url,
-      });
+      const newBlog = await blogService.create(blogData);
       setBlogs([...blogs, newBlog]);
-      setTitle("");
-      setAuthor("");
-      setUrl("");
       setSuccessfulMesssage(`a new blog ${newBlog.title} by ${newBlog.author}`);
       setTimeout(() => {
         setSuccessfulMesssage(null);
@@ -130,15 +118,7 @@ const App = () => {
         </div>
 
         <div style={showWhenVisible}>
-          <CreateBlog
-            handleCreateNewBlog={handleCreateNewBlog}
-            title={title}
-            setTitle={({ target }) => setTitle(target.value)}
-            author={author}
-            setAuthor={({ target }) => setAuthor(target.value)}
-            url={url}
-            setUrl={({ target }) => setUrl(target.value)}
-          />
+          <CreateBlog handleCreateNewBlog={handleCreateNewBlog} />
           <button onClick={() => setCreateVisible(false)}>cancel</button>
         </div>
       </div>
