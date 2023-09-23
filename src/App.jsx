@@ -48,7 +48,6 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogappUser");
     blogService.setToken("");
     setUser(null);
-    console.log("clicked logout");
   };
 
   const handleLogin = async (event) => {
@@ -125,6 +124,8 @@ const App = () => {
     );
   };
 
+  console.log("user", user.name);
+
   return (
     <div>
       <h2>blogs</h2>
@@ -140,10 +141,11 @@ const App = () => {
         </div>
       )}
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={user} />
       ))}
     </div>
   );
 };
 
 export default App;
+console;

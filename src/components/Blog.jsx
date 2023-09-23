@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const toggleShowDetails = () => {
@@ -14,13 +14,14 @@ const Blog = ({ blog }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
+  console.log("username", user.name);
 
   return (
     <div style={blogStyle}>
       <div>
         {blog.title}
         <button onClick={toggleShowDetails}>
-          {showDetails ? "view" : "hide"}
+          {showDetails ? "hide" : "view"}
         </button>
         {showDetails && (
           <div>
@@ -30,7 +31,7 @@ const Blog = ({ blog }) => {
               likes {blog.likes}
               <button>like</button>
             </div>
-            <div>{blog.user.name}</div>
+            <div>{user.name}</div>
           </div>
         )}
       </div>
