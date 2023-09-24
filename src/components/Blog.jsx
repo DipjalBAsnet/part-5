@@ -3,9 +3,11 @@ import blogService from "../services/blogs";
 
 const Blog = ({ blog, user, setBlogs }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [viewClicked, setViewClicked] = useState(false);
 
   const toggleShowDetails = () => {
     setShowDetails(!showDetails);
+    setViewClicked(true);
   };
 
   const blogStyle = {
@@ -33,6 +35,21 @@ const Blog = ({ blog, user, setBlogs }) => {
     }
   };
 
+  const handleDelete = async () => {
+    if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
+      try {
+        await blogService.remove(blog.id);
+        setBlogs((prevBlogs) =>
+          prevBlogs.filter((prevBlog) => prevBlog.id !== blog.id)
+        );
+      } catch (error) {
+        console.log("Error deleting Blog:", error);
+      }
+    }
+  };
+  console.log("User Username:", user.username);
+  console.log("Blog User Username:", blog.user.username);
+
   return (
     <div style={blogStyle}>
       <div>
@@ -49,6 +66,9 @@ const Blog = ({ blog, user, setBlogs }) => {
               <button onClick={handleLike}>like</button>
             </div>
             <div>{user.name}</div>
+            {user.username === blog.user.username && viewClicked && (
+              <button onClick={handleDelete}>Delete</button>
+            )}
           </div>
         )}
       </div>

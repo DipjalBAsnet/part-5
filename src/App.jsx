@@ -18,10 +18,15 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then((blogs) => {
       console.log("blogs", blogs);
-      setBlogs(sortByLikes(blogs));
-      setSortedBlogs(sortByLikes(blogs));
+
+      const userBlogs = blogs.filter(
+        (blog) => blog.user && blog.user.username === user?.username
+      );
+
+      setBlogs(sortByLikes(userBlogs));
+      setSortedBlogs(sortByLikes(userBlogs));
     });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
