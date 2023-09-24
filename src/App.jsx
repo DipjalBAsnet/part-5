@@ -7,6 +7,7 @@ import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
+  const [sortedBlogs, setSortedBlogs] = useState([]);
   const [createVisible, setCreateVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successfulMessage, setSuccessfulMesssage] = useState(null);
@@ -16,8 +17,9 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
-      console.log("blogs", blogs); // Check if it's an array
-      setBlogs(blogs);
+      console.log("blogs", blogs);
+      setBlogs(sortByLikes(blogs));
+      setSortedBlogs(sortByLikes(blogs));
     });
   }, []);
 
@@ -51,6 +53,10 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogappUser");
     blogService.setToken("");
     setUser(null);
+  };
+
+  const sortByLikes = (blogs) => {
+    return blogs.slice().sort((a, b) => b.likes - a.likes);
   };
 
   const handleLogin = async (event) => {
@@ -127,16 +133,6 @@ const App = () => {
     );
   };
 
-  // const updateLikes = (blogId, newLikes) => {
-  //   // console.log("Updating likes for blog id   :", blogId);
-  //   // console.log("New likes:", newLikes);
-
-  //   const updatedBlogs = blogs.map((blog) =>
-  //     blog.id === blogId ? { ...blog, likes: newLikes } : blog
-  //   );
-  //   setBlogs(updatedBlogs);
-  // };
-
   return (
     <div>
       <h2>blogs</h2>
@@ -151,8 +147,8 @@ const App = () => {
           <button onClick={handleLogout}>logout</button>
         </div>
       )}
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} user={user} setBlogs={setBlogs} />
+      {sortedBlogs.map((blog) => (
+        <Blog key={blog.id} blog={blog} user={user} setBlogs={setSortedBlogs} />
       ))}
     </div>
   );

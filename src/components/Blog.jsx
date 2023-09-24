@@ -21,7 +21,6 @@ const Blog = ({ blog, user, setBlogs }) => {
       const updatedBlog = await blogService.updateLikes(blog.id, {
         likes: blog.likes + 1,
       });
-      // Update the state to reflect the new likes count
       setBlogs((prevBlogs) =>
         prevBlogs.map((prevBlog) =>
           prevBlog.id === blog.id
