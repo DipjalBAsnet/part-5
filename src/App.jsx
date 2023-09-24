@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -15,7 +15,10 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      console.log("blogs", blogs); // Check if it's an array
+      setBlogs(blogs);
+    });
   }, []);
 
   useEffect(() => {
@@ -31,7 +34,7 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blogData);
       setBlogs([...blogs, newBlog]);
-      setSuccessfulMesssage(`a new blog ${newBlog.title} by ${newBlog.author}`);
+      setSuccessfulMesssage(`A new blog ${newBlog.title} by ${newBlog.author}`);
       setTimeout(() => {
         setSuccessfulMesssage(null);
       }, 5000);
@@ -106,14 +109,14 @@ const App = () => {
     );
   }
 
-  const creteBlogForm = () => {
+  const createBlogForm = () => {
     const hideWhenVisible = { display: createVisible ? "none" : "" };
     const showWhenVisible = { display: createVisible ? "" : "none" };
 
     return (
       <div>
         <div style={hideWhenVisible}>
-          <button onClick={() => setCreateVisible(true)}>new note</button>
+          <button onClick={() => setCreateVisible(true)}>new blog</button>
         </div>
 
         <div style={showWhenVisible}>
@@ -124,7 +127,15 @@ const App = () => {
     );
   };
 
-  console.log("user", user.name);
+  // const updateLikes = (blogId, newLikes) => {
+  //   // console.log("Updating likes for blog id   :", blogId);
+  //   // console.log("New likes:", newLikes);
+
+  //   const updatedBlogs = blogs.map((blog) =>
+  //     blog.id === blogId ? { ...blog, likes: newLikes } : blog
+  //   );
+  //   setBlogs(updatedBlogs);
+  // };
 
   return (
     <div>
@@ -133,7 +144,7 @@ const App = () => {
         errorMessage={errorMessage}
         successfulMessage={successfulMessage}
       />
-      {creteBlogForm()}
+      {createBlogForm()}
       {user && (
         <div>
           <h3>{user.name} logged in</h3>
@@ -141,11 +152,10 @@ const App = () => {
         </div>
       )}
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} user={user} />
+        <Blog key={blog.id} blog={blog} user={user} setBlogs={setBlogs} />
       ))}
     </div>
   );
 };
 
 export default App;
-console;

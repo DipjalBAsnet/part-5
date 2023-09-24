@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import blogService from "../services/blogs";
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, user, setBlogs }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const toggleShowDetails = () => {
@@ -14,7 +15,24 @@ const Blog = ({ blog, user }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
-  console.log("username", user.name);
+
+  const handleLike = async () => {
+    try {
+      const updatedBlog = await blogService.updateLikes(blog.id, {
+        likes: blog.likes + 1,
+      });
+      // Update the state to reflect the new likes count
+      setBlogs((prevBlogs) =>
+        prevBlogs.map((prevBlog) =>
+          prevBlog.id === blog.id
+            ? { ...prevBlog, likes: updatedBlog.likes }
+            : prevBlog
+        )
+      );
+    } catch (error) {
+      console.error("Error updating likes:", error);
+    }
+  };
 
   return (
     <div style={blogStyle}>
@@ -29,7 +47,7 @@ const Blog = ({ blog, user }) => {
             <div>{blog.url}</div>
             <div>
               likes {blog.likes}
-              <button>like</button>
+              <button onClick={handleLike}>like</button>
             </div>
             <div>{user.name}</div>
           </div>
@@ -38,4 +56,5 @@ const Blog = ({ blog, user }) => {
     </div>
   );
 };
+
 export default Blog;
