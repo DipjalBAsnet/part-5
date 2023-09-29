@@ -1,6 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import Blog from "./Blog";
 
 test("renders blog title and author by default", () => {
@@ -32,4 +32,32 @@ test("renders blog title and author by default", () => {
   const likesElement = screen.queryByText("likes 10");
   expect(urlElement).toBeNull();
   expect(likesElement).toBeNull();
+});
+
+test("renders blog details when 'view' button is clicked", () => {
+  const blog = {
+    title: "Test Blog",
+    author: "Test Author",
+    url: "http://test.com",
+    likes: 10,
+    user: {
+      username: "testuser",
+    },
+  };
+
+  const user = {
+    username: "testuser",
+    name: "Test User",
+  };
+
+  render(<Blog blog={blog} user={user} setBlogs={() => {}} />);
+
+  const viewButton = screen.getByText("view");
+  fireEvent.click(viewButton);
+
+  const urlElement = screen.getByText("http://test.com");
+  const likesElement = screen.getByText("likes 10");
+
+  expect(urlElement).toBeInTheDocument();
+  expect(likesElement).toBeInTheDocument();
 });
