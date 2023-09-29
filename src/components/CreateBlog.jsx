@@ -30,6 +30,7 @@ const CreateBlog = ({ handleCreateNewBlog }) => {
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            data-testid="title-input"
             required
           />
         </div>
@@ -40,6 +41,7 @@ const CreateBlog = ({ handleCreateNewBlog }) => {
             name="author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
+            data-testid="author-input"
             required
           />
         </div>
@@ -50,6 +52,7 @@ const CreateBlog = ({ handleCreateNewBlog }) => {
             name="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
+            data-testid="url-input"
             required
           />
         </div>
