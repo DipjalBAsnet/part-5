@@ -48,12 +48,13 @@ const Blog = ({ blog, user, setBlogs }) => {
       }
     }
   };
-  console.log("User Username:", user.username);
-  console.log("Blog User Username:", blog.user.username);
+
+  console.log("ba", blog.author);
+  console.log("blog", blog);
 
   return (
     <div style={blogStyle}>
-      <div>
+      <div className="blog">
         {blog.title}
         <button onClick={toggleShowDetails}>
           {showDetails ? "hide" : "view"}
