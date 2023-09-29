@@ -1,7 +1,13 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import Blog from "./Blog";
+import userEvent from "@testing-library/user-event";
+import blogService from "../services/blogs";
+
+jest.mock("../services/blogs", () => ({
+  updateLikes: jest.fn(),
+}));
 
 test("renders blog title and author by default", () => {
   const blog = {
@@ -60,4 +66,41 @@ test("renders blog details when 'view' button is clicked", () => {
 
   expect(urlElement).toBeInTheDocument();
   expect(likesElement).toBeInTheDocument();
+});
+
+test("clicking the like button calls event handler twice", async () => {
+  blogService.updateLikes.mockResolvedValueOnce({ likes: 11 });
+
+  const blog = {
+    title: "Test Blog",
+    author: "Test Author",
+    url: "http://test.com",
+    likes: 10,
+    user: {
+      username: "testuser",
+    },
+  };
+
+  const user = {
+    username: "testuser",
+    name: "Test User",
+  };
+
+  const mockSetBlogs = jest.fn();
+
+  render(<Blog blog={blog} user={user} setBlogs={mockSetBlogs} />);
+
+  const viewButton = screen.getByText("view");
+  userEvent.click(viewButton);
+
+  // Make sure the like button is visible before clicking
+  await screen.findByTestId("like-button");
+
+  const likeButton = screen.getByTestId("like-button");
+  userEvent.click(likeButton);
+  userEvent.click(likeButton);
+
+  await waitFor(() => {
+    expect(mockSetBlogs).toHaveBeenCalledTimes(2);
+  });
 });

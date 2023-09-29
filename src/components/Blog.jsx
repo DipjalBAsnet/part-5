@@ -21,9 +21,11 @@ const Blog = ({ blog, user, setBlogs }) => {
 
   const handleLike = async () => {
     try {
+      console.log("handleLike called");
       const updatedBlog = await blogService.updateLikes(blog.id, {
         likes: blog.likes + 1,
       });
+      console.log(updatedBlog);
       setBlogs((prevBlogs) =>
         prevBlogs.map((prevBlog) =>
           prevBlog.id === blog.id
@@ -49,9 +51,6 @@ const Blog = ({ blog, user, setBlogs }) => {
     }
   };
 
-  console.log("ba", blog.author);
-  console.log("blog", blog);
-
   return (
     <div style={blogStyle}>
       <div className="blog">
@@ -65,7 +64,9 @@ const Blog = ({ blog, user, setBlogs }) => {
             <div>{blog.url}</div>
             <div>
               likes {blog.likes}
-              <button onClick={handleLike}>like</button>
+              <button onClick={handleLike} data-testid="like-button">
+                like
+              </button>
             </div>
             <div>{user.name}</div>
             {user.username === blog.user.username && viewClicked && (
