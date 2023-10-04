@@ -41,7 +41,9 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blogData);
       setBlogs([...blogs, newBlog]);
-      setSuccessfulMesssage(`A new blog ${newBlog.title} by ${newBlog.author}`);
+      setSuccessfulMesssage(
+        `A new blog ${newBlog.title} by ${newBlog.author} with ${newBlog.url}`
+      );
       setTimeout(() => {
         setSuccessfulMesssage(null);
       }, 5000);
